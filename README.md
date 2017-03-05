@@ -3,9 +3,9 @@ Chat for Kanboard
 
 [![Build Status](https://travis-ci.org/kanboard/plugin-chat.svg?branch=master)](https://travis-ci.org/kanboard/plugin-chat)
 
-Minimalist internal chat for Kanboard:
+Minimalist internal chat for Kanboard.
 
-- Only one room for all users
+- Only one room for all users (small team)
 - No one to one chat
 - Notification on user mention
 - Simplified Markdown rendering
@@ -17,7 +17,7 @@ Minimalist internal chat for Kanboard:
 This is a very basic and minimalist chat extension.
 
 The goal is **NOT** to replace full-featured traditional chat applications.
-If you need a more elaborated chat system, use something like Slack, Mattermost, RocketChat, Jabber or IRC. 
+If you need something more elaborated, you should probably use Slack, Mattermost, RocketChat, Jabber or IRC.
 
 Screenshots
 -----------

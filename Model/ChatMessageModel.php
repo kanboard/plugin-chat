@@ -18,6 +18,13 @@ class ChatMessageModel extends Base
     const TABLE = 'chat_messages';
     const MAX_MESSAGES = 1000;
 
+    /**
+     * Add a new message
+     *
+     * @param  integer $userId
+     * @param  string  $message
+     * @return bool|int
+     */
     public function create($userId, $message)
     {
         $messageId = $this->db->table(self::TABLE)->persist(array(
@@ -35,6 +42,13 @@ class ChatMessageModel extends Base
         return $messageId;
     }
 
+    /**
+     * Get last messages for a given user
+     *
+     * @param  integer $userId
+     * @param  integer $limit
+     * @return array
+     */
     public function getMessages($userId, $limit = 50)
     {
         $position = $this->chatUserModel->getLastPosition($userId);
@@ -66,11 +80,22 @@ class ChatMessageModel extends Base
         return $records;
     }
 
+    /**
+     * Check if the user has unseen messages
+     *
+     * @param  integer $messageId
+     * @return bool
+     */
     public function hasUnseenMessages($messageId)
     {
         return $this->db->table(self::TABLE)->gt('id', $messageId)->count() > 0;
     }
 
+    /**
+     * Get last messageID from the database
+     *
+     * @return integer
+     */
     public function getLastMessageId()
     {
         return (int) $this->db->table(self::TABLE)->desc('id')->findOneColumn('id');
@@ -79,7 +104,6 @@ class ChatMessageModel extends Base
     /**
      * Remove old messages to avoid large table
      *
-     * @access public
      * @param  integer $max
      */
     public function cleanup($max)
