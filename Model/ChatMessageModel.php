@@ -16,6 +16,7 @@ use Kanboard\Model\UserModel;
 class ChatMessageModel extends Base
 {
     const TABLE = 'chat_messages';
+    const MAX_MESSAGES = 1000;
 
     public function create($userId, $message)
     {
@@ -28,6 +29,8 @@ class ChatMessageModel extends Base
         if ($messageId > 0) {
             $this->chatUserModel->setLastPosition($userId, $messageId);
         }
+
+        $this->cleanup(self::MAX_MESSAGES);
 
         return $messageId;
     }
@@ -71,5 +74,24 @@ class ChatMessageModel extends Base
     public function getLastMessageId()
     {
         return (int) $this->db->table(self::TABLE)->desc('id')->findOneColumn('id');
+    }
+
+    /**
+     * Remove old messages to avoid large table
+     *
+     * @access public
+     * @param  integer $max
+     */
+    public function cleanup($max)
+    {
+        $total = $this->db->table(self::TABLE)->count();
+
+        if ($total > $max) {
+            $ids = $this->db->table(self::TABLE)->asc('id')->limit($total - $max)->findAllByColumn('id');
+
+            if (! empty($ids)) {
+                $this->db->table(self::TABLE)->in('id', $ids)->remove();
+            }
+        }
     }
 }
