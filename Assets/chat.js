@@ -108,7 +108,7 @@ KB.component('chat-widget', function (containerElement, options) {
         var widget = KB.dom('div')
             .addClass('chat-widget-minimized')
             .add(toolbar.build())
-            .add(KB.dom('span').text(title).build());
+            .add(KB.dom('a').attr('href', '#').click(restore).text(title).build());
 
         if (mentioned) {
             widget.addClass('chat-widget-mentioned');
