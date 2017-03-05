@@ -1,20 +1,12 @@
 <?php
 
-use Kanboard\Core\Plugin\Loader;
 use Kanboard\Plugin\Chat\Model\ChatMessageModel;
 use Kanboard\Plugin\Chat\Model\ChatSequenceModel;
 
-require_once 'tests/units/Base.php';
+require_once __DIR__.'/BaseModelTest.php';
 
-class ChatMessageModelTest extends Base
+class ChatMessageModelTest extends BaseModelTest
 {
-    public function setUp()
-    {
-        parent::setUp();
-        $plugin = new Loader($this->container);
-        $plugin->scan();
-    }
-
     public function testCreate()
     {
         $chatMessageModel = new ChatMessageModel($this->container);

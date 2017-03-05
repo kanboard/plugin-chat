@@ -11,7 +11,7 @@ php:
 
 env:
   global:
-    - PLUGIN=Jabber
+    - PLUGIN=Chat
     - KANBOARD_REPO=https://github.com/kanboard/kanboard.git
   matrix:
     - DB=sqlite
