@@ -51,7 +51,6 @@ KB.component('chat-widget', function (containerElement, options) {
         }
 
         KB.http.get(url + "&lastMessageId=" + lastMessageId).success(function (response) {
-            console.log(response);
             var isDifferentState = response.nbUnread !== nbUnread || response.mentioned !== mentioned;
             nbUnread = response.nbUnread;
             mentioned = response.mentioned;
@@ -206,7 +205,11 @@ KB.component('chat-widget', function (containerElement, options) {
     }
 
     function scrollBottom() {
-        document.querySelector('.chat-messages').scrollTop = document.querySelector('.chat-message:last-child').offsetTop;
+        var lastMessageElement = document.querySelector('.chat-message:last-child');
+
+        if (lastMessageElement) {
+            document.querySelector('.chat-messages').scrollTop = lastMessageElement.offsetTop;
+        }
     }
 
     this.render = function () {

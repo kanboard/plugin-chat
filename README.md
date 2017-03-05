@@ -7,6 +7,7 @@ Basic internal chat for Kanboard users:
 
 - Only one room for all users
 - No one to one chat
+- Notification on user mention
 - Markdown rendering (Simplified)
 - History of 50 visible messages
 - Highlight unread messages

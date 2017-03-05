@@ -1,7 +1,7 @@
-<?php if (empty($messages)): ?>
-    <p class="alert"><?= t('There is no message.') ?></p>
-<?php else: ?>
-    <div class="chat-messages">
+<div class="chat-messages">
+    <?php if (empty($messages)): ?>
+        <p class="alert"><?= t('There is no message.') ?></p>
+    <?php else: ?>
         <?php foreach ($messages as $message): ?>
             <div class="chat-message <?= $message['unread'] ? 'unread' : '' ?>">
                 <?= $this->helper->avatar->small(
@@ -21,5 +21,5 @@
                 </div>
             </div>
         <?php endforeach ?>
-    </div>
-<?php endif ?>
+    <?php endif ?>
+</div>

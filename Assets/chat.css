@@ -1,5 +1,6 @@
 #chat-form input[type='text'] {
-    width: 100%;
+    width: 295px;
+    max-width: 99%;
 }
 
 .chat-widget-toolbar {
@@ -70,28 +71,33 @@
 }
 
 #chat-widget-messages-container {
-    max-height: 265px;
-    min-height: 265px;
+    min-height: 270px;
     position: relative;
 }
 
-.chat-messages {
-    max-height: 265px;
-    min-height: 265px;
-}
-
-.chat-widget-maximized .chat-messages,
 .chat-widget-maximized #chat-widget-messages-container {
-    max-height: 415px;
-    min-height: 415px;
+    min-height: 420px;
 }
 
 .chat-messages {
+    -ms-overflow-style: none;
     overflow: scroll;
     position: absolute;
-    width: 100%;
+    width: 99%;
     bottom: 0;
     left: 0;
+}
+
+.chat-widget-normal .chat-messages {
+    max-height: 265px;
+}
+
+.chat-widget-maximized .chat-messages {
+    max-height: 415px;
+}
+
+.chat-widget-maximized #chat-form input[type='text'] {
+    width: 795px;
 }
 
 .chat-message {
@@ -131,4 +137,48 @@
 @keyframes borderBlink {
     0% { border-color: #ccc; }
     50% { border-color: #000; }
+}
+
+@media (max-device-width: 667px) {
+    .chat-widget-normal, .chat-widget-minimized, .chat-widget-maximized {
+        right: 5px;
+    }
+
+    .chat-widget-normal, .chat-widget-maximized {
+        width: 300px;
+        height: 300px;
+    }
+
+    .chat-widget-maximized #chat-widget-messages-container {
+        min-height: 270px;
+    }
+
+    .chat-widget-maximized .chat-messages {
+        max-height: 265px;
+    }
+
+    #chat-form input[type='text'] {
+        width: 280px;
+    }
+}
+
+@media (max-device-width: 667px) and (orientation: landscape) {
+    .chat-widget-normal, .chat-widget-maximized {
+        width: 500px;
+        height: 250px;
+    }
+
+    .chat-widget-normal #chat-widget-messages-container,
+    .chat-widget-maximized #chat-widget-messages-container {
+        min-height: 215px;
+    }
+
+    .chat-widget-normal .chat-messages,
+    .chat-widget-maximized .chat-messages {
+        max-height: 200px;
+    }
+
+    #chat-form input[type='text'] {
+        width: 480px;
+    }
 }
