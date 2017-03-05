@@ -11,6 +11,7 @@ class Plugin extends Base
     {
         $this->hook->on('template:layout:js', array('template' => 'plugins/Chat/Assets/chat.js'));
         $this->hook->on('template:layout:css', array('template' => 'plugins/Chat/Assets/chat.css'));
+        $this->helper->hook->attach('template:config:application', 'Chat:config/application');
 
         $this->helper->hook->attach('template:layout:bottom', 'Chat:layout/bottom', array(
             'last_message_id' => ChatMessageModel::getInstance($this->container)->getLastMessageId()
@@ -34,7 +35,7 @@ class Plugin extends Base
 
     public function getPluginDescription()
     {
-        return t('Internal and minimalist Chat for Kanboard.');
+        return t('Minimalist Chat for Kanboard.');
     }
 
     public function getPluginAuthor()
