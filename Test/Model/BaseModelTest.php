@@ -11,6 +11,6 @@ abstract class BaseModelTest extends Base
         parent::setUp();
 
         $plugin = new Loader($this->container);
-        $plugin->scan();
+        $plugin->initializePlugin('Chat');
     }
 }

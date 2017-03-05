@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\Chat;
 
 use Kanboard\Core\Plugin\Base;
+use Kanboard\Core\Translator;
 use Kanboard\Plugin\Chat\Model\ChatMessageModel;
 
 class Plugin extends Base
@@ -16,6 +17,11 @@ class Plugin extends Base
         $this->helper->hook->attach('template:layout:bottom', 'Chat:layout/bottom', array(
             'last_message_id' => ChatMessageModel::getInstance($this->container)->getLastMessageId()
         ));
+    }
+
+    public function onStartup()
+    {
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
     }
 
     public function getClasses()
