@@ -15,7 +15,7 @@ class ChatHelper extends Base
     public function markdown($text)
     {
         $parser = new ChatMarkdown($this->container, false);
-        $parser->setMarkupEscaped(MARKDOWN_ESCAPE_HTML);
+        $parser->setMarkupEscaped(true);
         return $parser->text($text);
     }
 }
