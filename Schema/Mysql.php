@@ -17,9 +17,10 @@ function version_1(PDO $pdo)
         PRIMARY KEY(id)
     ) ENGINE=InnoDB CHARSET=utf8');
 
-    $pdo->exec('CREATE TABLE chat_sequences (
+    $pdo->exec('CREATE TABLE chat_users (
         `user_id` INT NOT NULL UNIQUE,
-        `message_id` INT NOT NULL,
+        `message_id` INT DEFAULT 0,
+        `mentioned` TINYINT(1) DEFAULT 0,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     ) ENGINE=InnoDB CHARSET=utf8');
 }

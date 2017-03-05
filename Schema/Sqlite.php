@@ -16,9 +16,10 @@ function version_1(PDO $pdo)
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )');
 
-    $pdo->exec('CREATE TABLE chat_sequences (
+    $pdo->exec('CREATE TABLE chat_users (
         "user_id" INTEGER NOT NULL UNIQUE,
-        "message_id" INTEGER NOT NULL,
+        "message_id" INTEGER DEFAULT 0,
+        "mentioned"  INTEGER DEFAULT 0,
         FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     )');
 }

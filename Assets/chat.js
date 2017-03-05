@@ -3,6 +3,15 @@ KB.component('chat-widget', function (containerElement, options) {
     var widgetState = localStorage.getItem('chatState') || 'minimized';
     var lastMessageId = options.lastMessageId;
     var nbUnread = 0;
+    var mentioned = false;
+
+    function unsetUserMention() {
+        if (mentioned) {
+            mentioned = false;
+            KB.http.get(options.ackUrl);
+            KB.dom(getTextInputElement()).removeClass('chat-input-mentioned');
+        }
+    }
 
     function setState(state) {
         widgetState = state;
@@ -21,6 +30,10 @@ KB.component('chat-widget', function (containerElement, options) {
     }
 
     function restore() {
+        if (widgetState === 'minimized') {
+            unsetUserMention();
+        }
+
         setState('normal');
         KB.http.get(options.showUrl).success(updateWidget);
     }
@@ -38,15 +51,27 @@ KB.component('chat-widget', function (containerElement, options) {
         }
 
         KB.http.get(url + "&lastMessageId=" + lastMessageId).success(function (response) {
+            console.log(response);
+            var isDifferentState = response.nbUnread !== nbUnread || response.mentioned !== mentioned;
             nbUnread = response.nbUnread;
+            mentioned = response.mentioned;
 
             if (widgetState !== 'minimized') {
                 lastMessageId = response.lastMessageId;
                 updateMessages(response.messages);
-            } else {
+
+                if (mentioned) {
+                    KB.dom(getTextInputElement()).addClass('chat-input-mentioned');
+                    setTimeout(unsetUserMention, 10000);
+                }
+            } else if (isDifferentState) {
                 updateWidget();
             }
         });
+    }
+
+    function getTextInputElement() {
+        return document.querySelector('#chat-form input[type="text"]');
     }
 
     function onFormSubmit() {
@@ -56,7 +81,7 @@ KB.component('chat-widget', function (containerElement, options) {
         if (url) {
             KB.http.postForm(url, formElement).success(function (response) {
                 updateWidget(response);
-                document.querySelector('#chat-form input[type="text"]').focus();
+                getTextInputElement().focus();
             });
         }
     }
@@ -80,11 +105,16 @@ KB.component('chat-widget', function (containerElement, options) {
             .click(restore)
             .build());
 
-        return KB.dom('div')
+        var widget = KB.dom('div')
             .addClass('chat-widget-minimized')
             .add(toolbar.build())
-            .add(KB.dom('span').text(title).build())
-            .build();
+            .add(KB.dom('span').text(title).build());
+
+        if (mentioned) {
+            widget.addClass('chat-widget-mentioned');
+        }
+
+        return widget.build();
     }
 
     function createMaximizedWidget(html) {
@@ -158,16 +188,18 @@ KB.component('chat-widget', function (containerElement, options) {
         if (widgetState !== 'minimized') {
             listen();
             scrollBottom();
+            getTextInputElement().onfocus = unsetUserMention;
         }
     }
 
     function renderWidget(html) {
         widgetElement = createWidget(html);
-        document.body.appendChild(widgetElement);
+        containerElement.appendChild(widgetElement);
 
         if (widgetState !== 'minimized') {
             listen();
             scrollBottom();
+            getTextInputElement().onfocus = unsetUserMention;
         }
 
         setInterval(refresh, options.interval * 1000);

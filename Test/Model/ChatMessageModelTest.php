@@ -1,7 +1,7 @@
 <?php
 
 use Kanboard\Plugin\Chat\Model\ChatMessageModel;
-use Kanboard\Plugin\Chat\Model\ChatSequenceModel;
+use Kanboard\Plugin\Chat\Model\ChatUserModel;
 
 require_once __DIR__.'/BaseModelTest.php';
 
@@ -33,7 +33,7 @@ class ChatMessageModelTest extends BaseModelTest
     public function testGetMessages()
     {
         $chatMessageModel = new ChatMessageModel($this->container);
-        $chatSequenceModel = new ChatSequenceModel($this->container);
+        $chatUserModel = new ChatUserModel($this->container);
 
         $this->assertEquals(1, $chatMessageModel->create(1, 'test1'));
         $this->assertEquals(2, $chatMessageModel->create(1, 'test2'));
@@ -48,6 +48,6 @@ class ChatMessageModelTest extends BaseModelTest
         $this->assertEquals('admin', $messages[1]['username']);
         $this->assertEquals('', $messages[1]['name']);
 
-        $this->assertEquals(2, $chatSequenceModel->getLastPosition(1));
+        $this->assertEquals(2, $chatUserModel->getLastPosition(1));
     }
 }

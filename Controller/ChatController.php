@@ -10,7 +10,7 @@ use Kanboard\Controller\BaseController;
  * @package Kanboard\Plugin\Chat\Controller
  * @author  Frederic Guillot
  * @property \Kanboard\Plugin\Chat\Model\ChatMessageModel  $chatMessageModel
- * @property \Kanboard\Plugin\Chat\Model\ChatSequenceModel $chatSequenceModel
+ * @property \Kanboard\Plugin\Chat\Model\ChatUserModel     $chatUserModel
  */
 class ChatController extends BaseController
 {
@@ -20,6 +20,7 @@ class ChatController extends BaseController
 
         if (! empty($values['message'])) {
             $this->chatMessageModel->create($this->userSession->getId(), $values['message']);
+            $this->chatUserModel->createUserMentions($values['message'], $this->userSession->getUsername());
         }
 
         $this->response->html($this->renderWidget());
@@ -35,11 +36,14 @@ class ChatController extends BaseController
         $lastSeenMessageId = $this->request->getIntegerParam('lastMessageId');
 
         if ($this->chatMessageModel->hasUnseenMessages($lastSeenMessageId)) {
+            $userId = $this->userSession->getId();
+
             $this->response->json(array(
                 'lastMessageId' => $this->chatMessageModel->getLastMessageId(),
-                'nbUnread'      => $this->chatSequenceModel->countUnreadMessages($this->userSession->getId()),
+                'mentioned'     => $this->chatUserModel->hasUserMention($userId),
+                'nbUnread'      => $this->chatUserModel->countUnreadMessages($userId),
                 'messages'      => $this->template->render('Chat:chat/messages', array(
-                    'messages' => $this->chatMessageModel->getMessages($this->userSession->getId()),
+                    'messages' => $this->chatMessageModel->getMessages($userId),
                 )),
             ));
         } else {
@@ -52,13 +56,21 @@ class ChatController extends BaseController
         $lastSeenMessageId = $this->request->getIntegerParam('lastMessageId');
 
         if ($this->chatMessageModel->hasUnseenMessages($lastSeenMessageId)) {
+            $userId = $this->userSession->getId();
             $this->response->json(array(
                 'lastMessageId' => $this->chatMessageModel->getLastMessageId(),
-                'nbUnread'      => $this->chatSequenceModel->countUnreadMessages($this->userSession->getId()),
+                'mentioned'     => $this->chatUserModel->hasUserMention($userId),
+                'nbUnread'      => $this->chatUserModel->countUnreadMessages($userId),
             ));
         } else {
             $this->response->status(304);
         }
+    }
+
+    public function ack()
+    {
+        $userId = $this->userSession->getId();
+        $this->response->json(array('result' => $this->chatUserModel->unsetUserMention($userId)));
     }
 
     protected function renderWidget()

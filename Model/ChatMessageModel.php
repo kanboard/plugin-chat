@@ -11,7 +11,7 @@ use Kanboard\Model\UserModel;
  * @package  Kanboard\Plugin\Chat\Model
  * @author   Frederic Guillot
  *
- * @property \Kanboard\Plugin\Chat\Model\ChatSequenceModel $chatSequenceModel
+ * @property \Kanboard\Plugin\Chat\Model\ChatUserModel $chatUserModel
  */
 class ChatMessageModel extends Base
 {
@@ -26,7 +26,7 @@ class ChatMessageModel extends Base
         ));
 
         if ($messageId > 0) {
-            $this->chatSequenceModel->setLastPosition($userId, $messageId);
+            $this->chatUserModel->setLastPosition($userId, $messageId);
         }
 
         return $messageId;
@@ -34,7 +34,7 @@ class ChatMessageModel extends Base
 
     public function getMessages($userId, $limit = 50)
     {
-        $position = $this->chatSequenceModel->getLastPosition($userId);
+        $position = $this->chatUserModel->getLastPosition($userId);
         $records = $this->db->table(self::TABLE)
             ->columns(
                 self::TABLE.'.id',
@@ -56,7 +56,7 @@ class ChatMessageModel extends Base
         }
 
         if (count($records) > 0) {
-            $this->chatSequenceModel->setLastPosition($userId, $records[0]['id']);
+            $this->chatUserModel->setLastPosition($userId, $records[0]['id']);
         }
 
         asort($records);

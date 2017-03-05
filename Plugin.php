@@ -29,7 +29,7 @@ class Plugin extends Base
         return array(
             'Plugin\Chat\Model' => array(
                 'ChatMessageModel',
-                'ChatSequenceModel',
+                'ChatUserModel',
             )
         );
     }
