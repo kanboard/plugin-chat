@@ -7,7 +7,7 @@ Basic internal chat for Kanboard users:
 
 - Only one room for all users
 - No one to one chat
-- Markdown rendering
+- Markdown rendering (Simplified)
 - History of 50 visible messages
 - Highlight unread messages
 - 3 different views: minimized, normal and maximized

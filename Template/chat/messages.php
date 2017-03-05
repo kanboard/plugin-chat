@@ -13,7 +13,7 @@
                     'avatar-left'); ?>
 
                 <div class="chat-message-body">
-                    <?= $this->helper->text->markdown($message['message']) ?>
+                    <?= $this->helper->chat->markdown($message['message']) ?>
                 </div>
                 <div class="chat-message-info">
                     <?= $this->helper->dt->datetime($message['creation_date']) ?> -

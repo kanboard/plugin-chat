@@ -17,6 +17,8 @@ class Plugin extends Base
         $this->helper->hook->attach('template:layout:bottom', 'Chat:layout/bottom', array(
             'last_message_id' => ChatMessageModel::getInstance($this->container)->getLastMessageId()
         ));
+
+        $this->helper->register('chat', '\Kanboard\Plugin\Chat\Helper\ChatHelper');
     }
 
     public function onStartup()
