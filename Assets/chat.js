@@ -5,6 +5,30 @@ KB.component('chat-widget', function (containerElement, options) {
     var nbUnread = 0;
     var mentioned = false;
     var originalTitle = document.title;
+    var messagesBuffer = [];
+    var bufferPosition = -1;
+
+    function onKeyDown(e) {
+        var key = KB.utils.getKey(e);
+
+        if (messagesBuffer.length > 0 && (key === 'ArrowUp' || key === 'ArrowDown')) {
+            var buffer = messagesBuffer.slice().reverse();
+
+            if (key === 'ArrowUp') {
+                bufferPosition++;
+            } else if (key === 'ArrowDown') {
+                bufferPosition--;
+            }
+
+            if (bufferPosition >= buffer.length) {
+                bufferPosition = 0;
+            } else if (bufferPosition < 0) {
+                bufferPosition = buffer.length - 1;
+            }
+
+            e.target.value = buffer[bufferPosition];
+        }
+    }
 
     function unsetUserMention() {
         if (mentioned) {
@@ -77,6 +101,13 @@ KB.component('chat-widget', function (containerElement, options) {
     function onFormSubmit() {
         var formElement = KB.find('#chat-form').build();
         var url = formElement.getAttribute('action');
+
+        bufferPosition = -1;
+        messagesBuffer.push(getTextInputElement().value);
+
+        if (messagesBuffer.length > 5) {
+            messagesBuffer = messagesBuffer.slice(-5);
+        }
 
         if (url) {
             KB.http.postForm(url, formElement).success(function (response) {
@@ -190,7 +221,10 @@ KB.component('chat-widget', function (containerElement, options) {
         if (widgetState !== 'minimized') {
             listen();
             scrollBottom();
-            getTextInputElement().onfocus = unsetUserMention;
+
+            var textInputElement = getTextInputElement();
+            textInputElement.onfocus = unsetUserMention;
+            textInputElement.onkeydown = onKeyDown;
         }
     }
 
@@ -201,7 +235,10 @@ KB.component('chat-widget', function (containerElement, options) {
         if (widgetState !== 'minimized') {
             listen();
             scrollBottom();
-            getTextInputElement().onfocus = unsetUserMention;
+
+            var textInputElement = getTextInputElement();
+            textInputElement.onfocus = unsetUserMention;
+            textInputElement.onkeydown = onKeyDown;
         }
 
         setInterval(refresh, options.interval * 1000);
