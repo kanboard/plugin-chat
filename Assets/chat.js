@@ -4,6 +4,7 @@ KB.component('chat-widget', function (containerElement, options) {
     var lastMessageId = options.lastMessageId;
     var nbUnread = 0;
     var mentioned = false;
+    var originalTitle = document.title;
 
     function unsetUserMention() {
         if (mentioned) {
@@ -169,6 +170,8 @@ KB.component('chat-widget', function (containerElement, options) {
     }
 
     function createWidget(html) {
+        updateWindowTitle();
+
         if (widgetState === 'minimized') {
             return createMinimizedWidget(html);
         } else if (widgetState === 'maximized') {
@@ -212,7 +215,21 @@ KB.component('chat-widget', function (containerElement, options) {
         }
     }
 
+    function updateWindowTitle() {
+        if (nbUnread > 0) {
+            if (mentioned) {
+                document.title = '(' + nbUnread + '!) ' + originalTitle;
+            } else {
+                document.title = '(' + nbUnread + ') ' + originalTitle;
+            }
+        } else if (mentioned) {
+            document.title = '(*) ' + originalTitle;
+        } else if (document.title !== originalTitle) {
+            document.title = originalTitle;
+        }
+    }
+
     this.render = function () {
         KB.http.get(options.showUrl).success(renderWidget);
-    }
+    };
 });
