@@ -55,7 +55,7 @@ Author
 Requirements
 ------------
 
-- Kanboard >= 1.0.40
+- Kanboard >= 1.2.3
 
 Installation
 ------------

@@ -4,7 +4,13 @@ namespace Kanboard\Plugin\Chat\Schema;
 
 use PDO;
 
-const VERSION = 1;
+const VERSION = 2;
+
+function version_2(PDO $pdo)
+{
+    $pdo->exec('ALTER TABLE `chat_messages` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+    $pdo->exec('ALTER TABLE `chat_users` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+}
 
 function version_1(PDO $pdo)
 {
